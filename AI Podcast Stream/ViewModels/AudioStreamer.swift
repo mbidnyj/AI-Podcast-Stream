@@ -6,6 +6,8 @@
 //
 
 import AVFoundation
+import MediaPlayer
+
 
 class AudioStreamer: ObservableObject {
     private var player: AVPlayer?
@@ -39,6 +41,39 @@ class AudioStreamer: ObservableObject {
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             print("Failed to set up audio session: \(error)")
+        }
+    }
+    
+    
+    
+    func updateNowPlayingInfo(with image: UIImage, title: String, podcastTitle: String) {
+        var nowPlayingInfo = [String: Any]()
+        nowPlayingInfo[MPMediaItemPropertyTitle] = title
+        nowPlayingInfo[MPMediaItemPropertyPodcastTitle] = podcastTitle
+
+        let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
+        nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+
+        setupRemoteTransportControls()
+    }
+    
+    
+    
+    func setupRemoteTransportControls() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+
+        // Play command
+        commandCenter.playCommand.addTarget { [weak self] event in
+            self?.player?.play()
+            return .success
+        }
+
+        // Pause command
+        commandCenter.pauseCommand.addTarget { [weak self] event in
+            self?.player?.pause()
+            return .success
         }
     }
 }

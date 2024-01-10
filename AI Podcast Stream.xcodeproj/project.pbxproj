@@ -11,6 +11,11 @@
 		2F99C0152B4EEF26000B0A87 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C0142B4EEF26000B0A87 /* ContentView.swift */; };
 		2F99C0172B4EEF28000B0A87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F99C0162B4EEF28000B0A87 /* Assets.xcassets */; };
 		2F99C01A2B4EEF28000B0A87 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F99C0192B4EEF28000B0A87 /* Preview Assets.xcassets */; };
+		2F99C0222B4EF074000B0A87 /* PodcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C0212B4EF074000B0A87 /* PodcastView.swift */; };
+		2F99C02C2B4EF1F3000B0A87 /* AudioStreamer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C02B2B4EF1F3000B0A87 /* AudioStreamer.swift */; };
+		2F99C02F2B4F004B000B0A87 /* ImageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C02E2B4F004B000B0A87 /* ImageFetcher.swift */; };
+		2F99C0322B4F099E000B0A87 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C0312B4F099E000B0A87 /* APIService.swift */; };
+		2F99C0362B4F0A83000B0A87 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C0352B4F0A83000B0A87 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +24,12 @@
 		2F99C0142B4EEF26000B0A87 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2F99C0162B4EEF28000B0A87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F99C0192B4EEF28000B0A87 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2F99C0212B4EF074000B0A87 /* PodcastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastView.swift; sourceTree = "<group>"; };
+		2F99C02B2B4EF1F3000B0A87 /* AudioStreamer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioStreamer.swift; sourceTree = "<group>"; };
+		2F99C02D2B4EF48F000B0A87 /* AI-Podcast-Stream-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "AI-Podcast-Stream-Info.plist"; sourceTree = SOURCE_ROOT; };
+		2F99C02E2B4F004B000B0A87 /* ImageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetcher.swift; sourceTree = "<group>"; };
+		2F99C0312B4F099E000B0A87 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		2F99C0352B4F0A83000B0A87 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +63,11 @@
 			isa = PBXGroup;
 			children = (
 				2F99C0122B4EEF26000B0A87 /* AI_Podcast_StreamApp.swift */,
-				2F99C0142B4EEF26000B0A87 /* ContentView.swift */,
+				2F99C02D2B4EF48F000B0A87 /* AI-Podcast-Stream-Info.plist */,
+				2F99C0202B4EEF80000B0A87 /* Views */,
+				2F99C0282B4EF151000B0A87 /* ViewModels */,
+				2F99C0302B4F0980000B0A87 /* Networking */,
+				2F99C0332B4F0A5E000B0A87 /* Utilities */,
 				2F99C0162B4EEF28000B0A87 /* Assets.xcassets */,
 				2F99C0182B4EEF28000B0A87 /* Preview Content */,
 			);
@@ -65,6 +80,40 @@
 				2F99C0192B4EEF28000B0A87 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2F99C0202B4EEF80000B0A87 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2F99C0142B4EEF26000B0A87 /* ContentView.swift */,
+				2F99C0212B4EF074000B0A87 /* PodcastView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2F99C0282B4EF151000B0A87 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				2F99C02B2B4EF1F3000B0A87 /* AudioStreamer.swift */,
+				2F99C02E2B4F004B000B0A87 /* ImageFetcher.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		2F99C0302B4F0980000B0A87 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				2F99C0312B4F099E000B0A87 /* APIService.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		2F99C0332B4F0A5E000B0A87 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				2F99C0352B4F0A83000B0A87 /* Constants.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,6 +188,11 @@
 			files = (
 				2F99C0152B4EEF26000B0A87 /* ContentView.swift in Sources */,
 				2F99C0132B4EEF26000B0A87 /* AI_Podcast_StreamApp.swift in Sources */,
+				2F99C0222B4EF074000B0A87 /* PodcastView.swift in Sources */,
+				2F99C02C2B4EF1F3000B0A87 /* AudioStreamer.swift in Sources */,
+				2F99C0362B4F0A83000B0A87 /* Constants.swift in Sources */,
+				2F99C0322B4F099E000B0A87 /* APIService.swift in Sources */,
+				2F99C02F2B4F004B000B0A87 /* ImageFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,11 +329,13 @@
 				DEVELOPMENT_TEAM = R2AL294ZT9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "AI-Podcast-Stream-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -304,11 +360,13 @@
 				DEVELOPMENT_TEAM = R2AL294ZT9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "AI-Podcast-Stream-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

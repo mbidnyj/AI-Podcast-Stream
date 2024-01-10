@@ -8,50 +8,43 @@
 import Foundation
 import SwiftUI
 
+
 class ImageFetcher: ObservableObject {
-    @Published var image: Image? = nil
-    @Published var isLoading = false
-
-    // Function to fetch the image URL
-    func fetchImageUrl(from endpoint: String) {
-        isLoading = true
-
-        guard let url = URL(string: endpoint) else {
-            print("Invalid URL")
-            isLoading = false
-            return
+    private var apiService = APIService()
+    
+    @Published var coverImage: UIImage?
+    @Published var isLoadingImage = false
+    
+    // getCover
+    func loadCoverImage(topic: String) {
+        isLoadingImage = true
+        apiService.getCoverImageURL(topic: topic) { [weak self] result in
+            switch result {
+            case .success(let imageURL):
+                self?.downloadImage(from: imageURL)
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.isLoadingImage = false
+                    print("Error fetching image URL: \(error)")
+                    // Handle the error appropriately
+                }
+            }
         }
-
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            if let error = error {
-                print("Error fetching image URL: \(error)")
-                DispatchQueue.main.async {
-                    self?.isLoading = false
-                }
-                return
-            }
-
-            if let data = data, let imageUrlString = String(data: data, encoding: .utf8), let imageUrl = URL(string: imageUrlString) {
-                self?.downloadImage(from: imageUrl)
-            } else {
-                DispatchQueue.main.async {
-                    self?.isLoading = false
-                }
-                print("Invalid response data")
-            }
-        }.resume()
     }
-
-    // Function to download the image
+        
+        
+        
+    // getCover
     private func downloadImage(from url: URL) {
         URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
             DispatchQueue.main.async {
-                self?.isLoading = false
-                if let data = data, error == nil, let uiImage = UIImage(data: data) {
-                    self?.image = Image(uiImage: uiImage)
-                } else {
+                self?.isLoadingImage = false
+                guard let data = data, error == nil, let image = UIImage(data: data) else {
                     print("Error downloading image: \(error?.localizedDescription ?? "Unknown error")")
+                    // Handle the error
+                    return
                 }
+                self?.coverImage = image
             }
         }.resume()
     }
