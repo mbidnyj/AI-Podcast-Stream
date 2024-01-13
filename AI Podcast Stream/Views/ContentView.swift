@@ -15,6 +15,14 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
+                Button(action: startPodastButton) {
+                    Text("Start Podcast")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.green)
+                        .cornerRadius(10)
+                }
+                
                 Button(action: handleAudioButton) {
                     Text(isPlaying ? "Pause" : "Play")
                         .foregroundColor(.white)
@@ -53,9 +61,14 @@ struct ContentView: View {
         if self.isPlaying {
             self.streamer.pause()
         } else {
-            self.streamer.playStream(from: "https://wpr-ice.streamguys1.com/wpr-music-mp3-96")
+            self.streamer.play()
         }
         self.isPlaying.toggle()
+    }
+    
+    private func startPodastButton() {
+//        self.streamer.playStream(from: "https://wpr-ice.streamguys1.com/wpr-music-mp3-96")
+        self.streamer.playStream(from: "http://localhost:8080/api/getAudioStream?userId=123&topic=AI")
     }
 }
 

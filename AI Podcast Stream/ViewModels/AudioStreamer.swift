@@ -11,6 +11,7 @@ import MediaPlayer
 
 class AudioStreamer: ObservableObject {
     private var player: AVPlayer?
+    private var currentAudioURL: String?
 
     init() {
         configureAudioSession()
@@ -23,6 +24,7 @@ class AudioStreamer: ObservableObject {
         }
 
         let playerItem = AVPlayerItem(url: url)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         player = AVPlayer(playerItem: playerItem)
         play()
     }
@@ -44,6 +46,32 @@ class AudioStreamer: ObservableObject {
         }
     }
     
+    
+    @objc private func playerItemDidReachEnd(notification: Notification) {
+        requestNextAudio()
+    }
+    
+    private func requestNextAudio() {
+        // Assuming the server has an endpoint like '/next-audio' that returns the URL of the next audio file
+        let nextAudioURL = "http://yourserver.com/next-audio"
+        guard let url = URL(string: nextAudioURL) else {
+            print("Invalid URL for next audio")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching next audio: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            if let nextAudioPath = String(data: data, encoding: .utf8) {
+                DispatchQueue.main.async {
+                    self?.playStream(from: nextAudioPath)
+                }
+            }
+        }.resume()
+    }
     
     
     func updateNowPlayingInfo(with image: UIImage, title: String, podcastTitle: String) {
