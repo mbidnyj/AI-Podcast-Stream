@@ -8,70 +8,93 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var streamer = AudioStreamer()
-    @StateObject var imageFetcher = ImageFetcher()
-    @State private var isPlaying = false
-
-    var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                Button(action: startPodastButton) {
-                    Text("Start Podcast")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.green)
-                        .cornerRadius(10)
-                }
-                
-                Button(action: handleAudioButton) {
-                    Text(isPlaying ? "Pause" : "Play")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(isPlaying ? Color.red : Color.green)
-                        .cornerRadius(10)
-                }
-
-                // Image display
-                HStack{
-                    Spacer()
-                    if imageFetcher.isLoadingImage {
-                        ProgressView()
-                            .frame(width: geometry.size.width * 0.8)
-                    } else if let image = imageFetcher.coverImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: geometry.size.width * 0.8)
-                            .onAppear{
-                                streamer.updateNowPlayingInfo(with: image, title: "Whats is Artificial Intelligence?", podcastTitle: "AI Podcast")
-                            }
+    // 1. Define state variables to manage the text input
+        @State private var inputTopic: String = ""
+        @State private var showTestRequestView: Bool = false
+        @State private var temporaryTopic: String = ""
+        @State private var selectedTopic: String?
+        let topics = [
+                "Mastering Money Management?",
+                "Navigating Mental Wellness?",
+                "Trending in Pop Culture?",
+                "Tech's Latest Innovations?",
+                "Culinary Cultures Explored?",
+                "Mysteries: Solved, Unsolved?"
+            ]
+        
+        var body: some View {
+            NavigationStack {
+                // 2. Use a VStack to layout the elements vertically
+                VStack {
+                    // 2.1. Title section
+                    Text("Al Podcast")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding(.top)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    
+                    // 2.2. Buttons grid section
+                    // 3. Use a LazyVGrid to create a grid layout for buttons
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                        // 3.1. Create 6 buttons in the grid
+                        ForEach(topics.indices, id: \.self) { index in
+                                        Button(action: {
+                                            // When the button is tapped, set the selectedTopic
+                                            // This will trigger the navigation
+                                            self.selectedTopic = topics[index]
+                                        }) {
+                                            Text(topics[index])
+                                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 60)
+                                                .background(Color.blue)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(10)
+                                        }
+                                        .padding(.horizontal)
+                                    }
                     }
-                    Spacer()
+                    .padding()
+                    .frame(maxHeight: .infinity, alignment: .center)
+                    
+                    // 2.3. Text input and send button section
+                    HStack {
+                        // 4. Text input field
+                        TextField("Podcast topic...", text: $inputTopic)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.leading)
+                        
+                        // 5. Send button
+                        Button(action: {
+                            // Store the topic in temporary variable
+                            temporaryTopic = inputTopic
+                            // Clear the TextField
+                            inputTopic = ""
+                            // This will trigger the navigation
+                            self.showTestRequestView = true
+                        }) {
+                            Image(systemName: "paperplane.fill")
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(10)
+                        }
+                        .padding(.trailing)
+                        .navigationDestination(isPresented: $showTestRequestView) {
+                            PodcastView(receivedTopic: temporaryTopic)
+                                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 }
-            }
-            .onAppear {
-                imageFetcher.loadCoverImage(topic: "some topic")
-                streamer.setupRemoteTransportControls()
+                .padding(.bottom)
+                .navigationDestination(isPresented: .constant(selectedTopic != nil), destination: {
+                            if let selectedTopic = selectedTopic {
+                                PodcastView(receivedTopic: selectedTopic)
+                            } else {
+                                EmptyView()
+                            }
+                        })
             }
         }
-    }
-
-    // play/pause button
-    private func handleAudioButton() {
-        if self.isPlaying {
-            self.streamer.pause()
-        } else {
-            self.streamer.play()
-        }
-        self.isPlaying.toggle()
-    }
-    
-    private func startPodastButton() {
-//        self.streamer.playStream(from: "https://wpr-ice.streamguys1.com/wpr-music-mp3-96")
-        self.streamer.playStream(from: "http://localhost:8080/api/getAudioStream?userId=123&topic=AI")
-    }
 }
-
 
 #Preview {
     ContentView()

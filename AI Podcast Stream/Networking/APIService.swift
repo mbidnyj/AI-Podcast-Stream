@@ -35,4 +35,28 @@ struct APIService{
         }
         task.resume()
     }
+    
+    
+    
+    func fetchAuthToken(completion: @escaping (Result<String, Error>) -> Void) {
+            let url = URL(string: Constants.getAuth)!
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+
+                guard let data = data, let responseString = String(data: data, encoding: .utf8) else {
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to convert data to String"])))
+                    return
+                }
+
+                completion(.success(responseString))
+            }
+
+            task.resume()
+        }
 }

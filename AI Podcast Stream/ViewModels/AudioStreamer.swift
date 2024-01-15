@@ -17,12 +17,7 @@ class AudioStreamer: ObservableObject {
         configureAudioSession()
     }
 
-    func playStream(from url: String) {
-        guard let url = URL(string: url) else {
-            print("Invalid URL")
-            return
-        }
-
+    func playStream(from url: URL) {
         let playerItem = AVPlayerItem(url: url)
         NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         player = AVPlayer(playerItem: playerItem)
@@ -48,30 +43,30 @@ class AudioStreamer: ObservableObject {
     
     
     @objc private func playerItemDidReachEnd(notification: Notification) {
-        requestNextAudio()
+//        requestNextAudio()
     }
     
-    private func requestNextAudio() {
-        // Assuming the server has an endpoint like '/next-audio' that returns the URL of the next audio file
-        let nextAudioURL = "http://yourserver.com/next-audio"
-        guard let url = URL(string: nextAudioURL) else {
-            print("Invalid URL for next audio")
-            return
-        }
-
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let data = data, error == nil else {
-                print("Error fetching next audio: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-
-            if let nextAudioPath = String(data: data, encoding: .utf8) {
-                DispatchQueue.main.async {
-                    self?.playStream(from: nextAudioPath)
-                }
-            }
-        }.resume()
-    }
+//    private func requestNextAudio() {
+//        // Assuming the server has an endpoint like '/next-audio' that returns the URL of the next audio file
+//        let nextAudioURL = "http://yourserver.com/next-audio"
+//        guard let url = URL(string: nextAudioURL) else {
+//            print("Invalid URL for next audio")
+//            return
+//        }
+//
+//        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+//            guard let data = data, error == nil else {
+//                print("Error fetching next audio: \(error?.localizedDescription ?? "Unknown error")")
+//                return
+//            }
+//
+//            if let nextAudioPath = String(data: data, encoding: .utf8) {
+//                DispatchQueue.main.async {
+//                    self?.playStream(from: nextAudioPath)
+//                }
+//            }
+//        }.resume()
+//    }
     
     
     func updateNowPlayingInfo(with image: UIImage, title: String, podcastTitle: String) {
