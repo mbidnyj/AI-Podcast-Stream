@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct PodcastView: View {
-    // podcast topic
+    // received parameters
     var receivedTopic: String
+    var uuid: String
     // playing audio stream
     @ObservedObject var streamer = AudioStreamer()
     @State private var isPlaying = false
@@ -44,7 +45,7 @@ struct PodcastView: View {
                         .scaledToFit()
                         .frame(width: geometry.size.width * 0.8)
                         .onAppear{
-                            streamer.updateNowPlayingInfo(with: image, title: "Whats is Artificial Intelligence?", podcastTitle: "AI Podcast")
+                            streamer.updateNowPlayingInfo(with: image, title: receivedTopic, podcastTitle: "AI Podcast")
                         }
                 }
                 
@@ -68,8 +69,10 @@ struct PodcastView: View {
                             .padding(.leading)
                                             
                         Button(action: {
-                            startPodastButton()
-                            podcastTopic = ""
+                            if !podcastTopic.isEmpty {
+                                startPodastButton()
+                                podcastTopic = ""
+                            }
                         }) {
                             Image(systemName: "paperplane.fill")
                                 .foregroundColor(.white)
@@ -114,7 +117,7 @@ struct PodcastView: View {
                 print("API Response: \(responseString)")
                 self.authToken = responseString
                 self.isPlaying = true
-                let url = URL(string: Constants.getAudioStream + "?userId=" + (authToken ?? "12345") + "&topic=" + receivedTopic)!
+                let url = URL(string: Constants.getAudioStream + "?userId=" + uuid + "&podcastId=" + (authToken ?? uuid) + "&topic=" + receivedTopic)!
                 self.streamer.playStream(from: url)
             case .failure(let error):
                 print("Error fetching API data: \(error.localizedDescription)")
@@ -124,5 +127,5 @@ struct PodcastView: View {
 }
 
 #Preview {
-    PodcastView(receivedTopic: "What is API?")
+    PodcastView(receivedTopic: "What is API?", uuid: "1234567890")
 }
