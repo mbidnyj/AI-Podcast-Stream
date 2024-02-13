@@ -22,6 +22,7 @@ struct ContentView: View {
     }
         
     @State private var inputTopic: String = ""
+    @State private var textHeight: CGFloat = 35 // Initial height
     @State private var showPodcastView: Bool = false
     @State private var temporaryTopic: String = ""
     @State private var selectedTopic: String?
@@ -61,10 +62,20 @@ struct ContentView: View {
                 .frame(maxHeight: .infinity, alignment: .center)
                     
                 HStack {
-                    TextField("Podcast topic...", text: $inputTopic)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding(.leading)
-                        
+                    TextEditor(text: $inputTopic)
+                        .frame(height: max(35, textHeight))
+                        .border(Color.gray, width: 1)
+                        .padding()
+                        .onChange(of: inputTopic) {
+                            // Calculate the height of the text
+                            let textView = UITextView()
+                            textView.text = inputTopic
+                            textView.font = UIFont.systemFont(ofSize: 18)
+                            let size = CGSize(width: UIScreen.main.bounds.width - 90, height: .infinity)
+                            let estimatedSize = textView.sizeThatFits(size)
+                            textHeight = estimatedSize.height
+                        }
+                    
                     Button(action: {
                         if !inputTopic.isEmpty {
                             temporaryTopic = inputTopic
