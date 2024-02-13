@@ -62,19 +62,28 @@ struct ContentView: View {
                 .frame(maxHeight: .infinity, alignment: .center)
                     
                 HStack {
-                    TextEditor(text: $inputTopic)
-                        .frame(height: max(35, textHeight))
-                        .border(Color.gray, width: 1)
-                        .padding()
-                        .onChange(of: inputTopic) {
-                            // Calculate the height of the text
-                            let textView = UITextView()
-                            textView.text = inputTopic
-                            textView.font = UIFont.systemFont(ofSize: 18)
-                            let size = CGSize(width: UIScreen.main.bounds.width - 90, height: .infinity)
-                            let estimatedSize = textView.sizeThatFits(size)
-                            textHeight = estimatedSize.height
+                    ZStack(alignment: .topLeading) {
+                        TextEditor(text: $inputTopic)
+                            .frame(height: max(35, textHeight))
+                            .border(Color.gray, width: 1)
+                            .cornerRadius(5)
+                            .onChange(of: inputTopic) {
+                                let textView = UITextView()
+                                textView.text = inputTopic
+                                textView.font = UIFont.systemFont(ofSize: 18)
+                                let size = CGSize(width: UIScreen.main.bounds.width - 90, height: .infinity)
+                                let estimatedSize = textView.sizeThatFits(size)
+                                textHeight = estimatedSize.height
+                            }
+                        
+                        if inputTopic.isEmpty {
+                            Text("Podcast anything")
+                                .foregroundColor(.gray)
+                                .padding(.horizontal, 7) // Adjust to match TextEditor's text padding
+                                .padding(.vertical, 7) // Adjust to match TextEditor's text padding
                         }
+                    }
+                    .padding() // Apply padding to the ZStack for outer spacing
                     
                     Button(action: {
                         if !inputTopic.isEmpty {
