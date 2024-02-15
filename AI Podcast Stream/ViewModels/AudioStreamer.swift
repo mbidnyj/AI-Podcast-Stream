@@ -12,16 +12,39 @@ import MediaPlayer
 class AudioStreamer: ObservableObject {
     private var player: AVPlayer?
     private var currentAudioURL: String?
+    // loading spinner
+    private var playerItem: AVPlayerItem?
+    private var statusObservation: NSKeyValueObservation?
+    @Published var isLoading = false
+    @Published var isPlaying = true
 
     init() {
         configureAudioSession()
     }
 
     func playStream(from url: URL) {
+        DispatchQueue.main.async {
+            self.isLoading = true
+        }
         let playerItem = AVPlayerItem(url: url)
         NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+        
+        // Observe the player item's status to update isLoading
+        statusObservation?.invalidate() // Remove previous observation if any
+        statusObservation = playerItem.observe(\.status, options: [.new, .old], changeHandler: { [weak self] (playerItem, change) in
+            DispatchQueue.main.async {
+                switch playerItem.status {
+                case .readyToPlay:
+                    self?.isLoading = false
+                    self?.play()
+                default:
+                    break
+                }
+            }
+        })
+        
         player = AVPlayer(playerItem: playerItem)
-        play()
+        player?.play()
     }
 
     func play() {
@@ -41,9 +64,30 @@ class AudioStreamer: ObservableObject {
         }
     }
     
+    func togglePlayPause() {
+        guard let player = player else { return }
+
+        DispatchQueue.main.async {
+            if self.isPlaying {
+                player.pause()
+            } else {
+                if player.currentItem == nil, let url = self.currentAudioURL, let audioURL = URL(string: url) {
+                    // If there is no current item, play a new stream
+                    self.playStream(from: audioURL)
+                } else {
+                    player.play()
+                }
+            }
+            self.isPlaying.toggle() // Update the isPlaying property to reflect the change
+        }
+    }
     
     @objc private func playerItemDidReachEnd(notification: Notification) {
 //        requestNextAudio()
+        DispatchQueue.main.async {
+            self.isPlaying = false
+            self.isLoading = false
+        }
     }
     
 //    private func requestNextAudio() {

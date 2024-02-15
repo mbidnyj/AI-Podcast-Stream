@@ -33,7 +33,7 @@ struct ContentView: View {
         Topic(title: "The history of technology", icon: "gear"),
         Topic(title: "Future of transportation", icon: "car.fill"),
         Topic(title: "Deep sea mysteries", icon: "waveform.path.ecg"),
-        Topic(title: "Space travel: myths and facts", icon: "rocket.fill"),
+        Topic(title: "Space travel: myths and facts", icon: "star.fill"),
         Topic(title: "Ancient civilizations", icon: "pyramid.fill"),
         Topic(title: "The science of happiness", icon: "smiley.fill"),
         Topic(title: "World's greatest mysteries", icon: "magnifyingglass.circle.fill"),
@@ -65,9 +65,7 @@ struct ContentView: View {
         Topic(title: "The science behind nutrition", icon: "leaf.fill")
     ]
     
-    var topics: [Topic] {
-        allTopics.shuffled().prefix(7).map { $0 }
-    }
+    @State private var topics: [Topic] = []
         
     var body: some View {
         NavigationStack {
@@ -97,6 +95,9 @@ struct ContentView: View {
                     }
                     .navigationTitle("Topics to get started")
                     .navigationBarTitleDisplayMode(.inline)
+                    .onAppear {
+                        topics = allTopics.shuffled().prefix(8).map { $0 }
+                    }
                 }
                 
                 HStack {

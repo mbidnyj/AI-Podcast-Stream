@@ -21,6 +21,8 @@ struct PodcastView: View {
     @State private var authToken: String? = nil
     // podcast topic
     @State private var podcastTopic = ""
+    
+    
 
     var body: some View {
         GeometryReader { geometry in
@@ -55,19 +57,28 @@ struct PodcastView: View {
                     Spacer()
                     
                     // Play/Pause button
-                    Button(action: handleAudioButton) {
-                        Image(systemName: isPlaying ? "pause.circle" : "play.circle")
-                            .resizable()
-                            .frame(width: 50, height: 50)
+                    if streamer.isLoading {
+                        ProgressView()
+                            .scaleEffect(1.5)
                             .padding(.bottom, 35)
+                    } else {
+                        // Play/Pause button
+                        Button(action: handleAudioButton) {
+                            Image(systemName: streamer.isPlaying ? "pause.circle" : "play.circle")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .padding(.bottom, 35)
+                        }
                     }
+                                    
+                    Spacer()
                     
                     // Podcast question
                     HStack {
                         TextField("Podcast qeustion...", text: $podcastTopic)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.leading)
-                                            
+                                     
                         Button(action: {
                             if !podcastTopic.isEmpty {
                                 startPodastButton()
@@ -82,7 +93,6 @@ struct PodcastView: View {
                             }
                         .padding(.trailing)
                     }
-
                 }
             }
             .onAppear {
@@ -95,12 +105,7 @@ struct PodcastView: View {
 
     // play/pause button
     private func handleAudioButton() {
-        if self.isPlaying {
-            self.streamer.pause()
-        } else {
-            self.streamer.play()
-        }
-        self.isPlaying.toggle()
+        streamer.togglePlayPause()
     }
     
     private func startPodastButton() {
