@@ -79,11 +79,6 @@ struct ContentView: View {
                     ScrollView {
                         VStack(spacing: 20) {
                             ForEach(topics) { topic in
-//                                NavigationLink(destination: DetailView(topic: topic)) {
-//                                    TopicRow(topic: topic)
-//                                        .frame(width: UIScreen.main.bounds.width * 0.85)
-//                                }
-//                                .buttonStyle(.plain)
                                 NavigationLink(destination: PodcastView(receivedTopic: topic.title, uuid: uuid)) {
                                     TopicRow(topic: topic)
                                         .frame(width: UIScreen.main.bounds.width * 0.85)
@@ -98,7 +93,7 @@ struct ContentView: View {
                     .onAppear {
                         topics = allTopics.shuffled().prefix(8).map { $0 }
                     }
-                }
+                }.navigationViewStyle(StackNavigationViewStyle())
                 
                 HStack {
                     ZStack(alignment: .topLeading) {
@@ -181,16 +176,6 @@ struct TopicRow: View {
         .background(Color(UIColor.systemBackground))
         .cornerRadius(8)
         .shadow(radius: 3)
-    }
-}
-
-struct DetailView: View {
-    var topic: Topic
-    
-    var body: some View {
-        Text("Details for \(topic.title)")
-            .navigationTitle(topic.title)
-            .navigationBarTitleDisplayMode(.inline)
     }
 }
 
