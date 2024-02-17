@@ -21,12 +21,11 @@ struct PodcastView: View {
     @State private var authToken: String? = nil
     // podcast topic
     @State private var podcastTopic = ""
-    // loading states signs
-    @State private var currentStateIndex = 0
-    @State private var isCycling = true
-    let states = ["Creating", "Recording", "Editing", "Loading"]
-    @State private var scale: CGFloat = 1
-    @State private var opacity: Double = 1
+    // loading animation
+    @State private var isLoading = true
+    @State private var animate = false
+    // expanding text window
+    @State private var textHeight: CGFloat = 35 // Initial height
     
     
 
@@ -53,7 +52,7 @@ struct PodcastView: View {
                         .scaledToFit()
                         .frame(width: geometry.size.width * 0.8)
                         .onAppear{
-                            streamer.updateNowPlayingInfo(with: image, title: receivedTopic, podcastTitle: "AI Podcast")
+                            streamer.updateNowPlayingInfo(with: image, title: receivedTopic, podcastTitle: "Podcaster")
                         }
                 }
                 
@@ -65,19 +64,29 @@ struct PodcastView: View {
                     
                     // Play/Pause button
                     if streamer.isLoading {
-                        // loading status animation
-                        if isCycling {
-                            Text(states[currentStateIndex])
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .foregroundColor(.black)
-                                .scaleEffect(scale)
-                                .opacity(opacity)
-                                .onAppear {
-                                    cycleStates()
+                        // loading animation
+                        if isLoading {
+                            GeometryReader { geometry in
+                                ZStack(alignment: .leading) {
+                                    Rectangle()
+                                        .fill(Color.gray.opacity(0.3))
+                                        .frame(width: geometry.size.width * 0.85, height: 8)
+                                        .cornerRadius(4)
+                                                
+                                    Rectangle()
+                                        .fill(Color.blue.opacity(0.8))
+                                        .frame(width: (animate ? geometry.size.width * 0.85 : 0), height: 8)
+                                        .cornerRadius(4)
+                                        .animation(Animation.linear(duration: 8).repeatForever(autoreverses: false), value: animate)
                                 }
+                                // Center the ZStack horizontally by adjusting its frame
+                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                                .onAppear {
+                                    self.animate = true
+                                }
+                            }
                         }
-                        
                         Spacer()
                         
                         ProgressView()
@@ -97,10 +106,28 @@ struct PodcastView: View {
                     
                     // Podcast question
                     HStack {
-                        TextField("Podcast qeustion...", text: $podcastTopic)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.leading)
-                                     
+                        ZStack(alignment: .topLeading) {
+                            TextEditor(text: $podcastTopic)
+                                .frame(height: max(35, textHeight))
+                                .border(Color.gray, width: 1)
+                                .cornerRadius(5)
+                                .onChange(of: podcastTopic) {
+                                    let textView = UITextView()
+                                    textView.text = podcastTopic
+                                    textView.font = UIFont.systemFont(ofSize: 18)
+                                    let size = CGSize(width: UIScreen.main.bounds.width - 90, height: .infinity)
+                                    let estimatedSize = textView.sizeThatFits(size)
+                                    textHeight = estimatedSize.height
+                                }
+                            
+                            if podcastTopic.isEmpty {
+                                Text("Ask additional question")
+                                    .foregroundColor(.gray)
+                                    .padding(.horizontal, 7) // Adjust to match TextEditor's text padding
+                                    .padding(.vertical, 7) // Adjust to match TextEditor's text padding
+                            }
+                        }
+                        .padding() // Apply padding to the ZStack for outer spacing
                         Button(action: {
                             if !podcastTopic.isEmpty {
                                 startPodastButton()
@@ -121,7 +148,7 @@ struct PodcastView: View {
                 fetchAuthToken()
                 imageFetcher.loadCoverImage(topic: receivedTopic)
                 streamer.setupRemoteTransportControls()
-                isCycling = true
+                
             }
         }
     }
@@ -129,7 +156,6 @@ struct PodcastView: View {
     // play/pause button
     private func handleAudioButton() {
         streamer.togglePlayPause()
-        isCycling = false
     }
     
     private func startPodastButton() {
@@ -153,28 +179,6 @@ struct PodcastView: View {
                 self.streamer.playStream(from: url)
             case .failure(let error):
                 print("Error fetching API data: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    private func cycleStates() {
-        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { timer in
-            if !isCycling {
-                timer.invalidate()
-            } else {
-                withAnimation(.easeInOut(duration: 1.0)) {
-                    scale = 0.5
-                    opacity = 0.0
-                }
-                    
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    currentStateIndex = (currentStateIndex + 1) % states.count
-                        
-                    withAnimation(.easeInOut(duration: 1.0)) {
-                        scale = 1
-                        opacity = 1
-                    }
-                }
             }
         }
     }
