@@ -25,6 +25,7 @@ struct PodcastView: View {
     @State private var isLoading = true
     // expanding text window
     @State private var textHeight: CGFloat = 35 // Initial height
+    @State private var buttonHeight: CGFloat = 0
     
     
 
@@ -100,9 +101,12 @@ struct PodcastView: View {
                     HStack {
                         ZStack(alignment: .topLeading) {
                             TextEditor(text: $podcastTopic)
-                                .frame(height: max(35, textHeight))
-                                .border(Color.gray, width: 1)
-                                .cornerRadius(5)
+                                .frame(height: max(textHeight, buttonHeight))
+                                .background(Color(.systemGray6))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.gray, lineWidth: 0.5)
+                                )
                                 .onChange(of: podcastTopic) {
                                     let textView = UITextView()
                                     textView.text = podcastTopic
@@ -113,10 +117,10 @@ struct PodcastView: View {
                                 }
                             
                             if podcastTopic.isEmpty {
-                                Text("Ask additional question")
+                                Text("Ask additional question ✏️")
                                     .foregroundColor(.gray)
                                     .padding(.horizontal, 7) // Adjust to match TextEditor's text padding
-                                    .padding(.vertical, 7) // Adjust to match TextEditor's text padding
+                                    .padding(.vertical, 8) // Adjust to match TextEditor's text padding
                             }
                         }
                         .padding() // Apply padding to the ZStack for outer spacing
@@ -130,7 +134,14 @@ struct PodcastView: View {
                                 .foregroundColor(.white)
                                 .padding()
                                 .background(Color.blue)
-                                .cornerRadius(10)
+                                .cornerRadius(15)
+                                .overlay(
+                                    GeometryReader { geometry in
+                                        Color.clear.onAppear {
+                                            buttonHeight = geometry.size.height
+                                        }
+                                    }
+                                )
                             }
                         .padding(.trailing)
                     }

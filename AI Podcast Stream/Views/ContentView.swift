@@ -26,6 +26,7 @@ struct ContentView: View {
     @State private var showPodcastView: Bool = false
     @State private var temporaryTopic: String = ""
     @State private var selectedTopic: String?
+    @State private var buttonHeight: CGFloat = 0
 
     let allTopics = [
         Topic(title: "The art of conversation", icon: "💬"),
@@ -66,6 +67,7 @@ struct ContentView: View {
     ]
     
     @State private var topics: [Topic] = []
+    @State private var isLoading = true
         
     var body: some View {
         NavigationStack {
@@ -100,9 +102,12 @@ struct ContentView: View {
                 HStack {
                     ZStack(alignment: .topLeading) {
                         TextEditor(text: $inputTopic)
-                            .frame(height: max(35, textHeight))
-                            .border(Color.gray, width: 1)
-                            .cornerRadius(5)
+                            .frame(height: max(textHeight, buttonHeight))
+                            .background(Color(.systemGray6))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray, lineWidth: 0.5)
+                            )
                             .onChange(of: inputTopic) {
                                 let textView = UITextView()
                                 textView.text = inputTopic
@@ -113,10 +118,10 @@ struct ContentView: View {
                             }
                         
                         if inputTopic.isEmpty {
-                            Text("Podcast anything")
+                            Text("Podcast anything 🎤")
                                 .foregroundColor(.gray)
                                 .padding(.horizontal, 7) // Adjust to match TextEditor's text padding
-                                .padding(.vertical, 7) // Adjust to match TextEditor's text padding
+                                .padding(.vertical, 8) // Adjust to match TextEditor's text padding
                         }
                     }
                     .padding() // Apply padding to the ZStack for outer spacing
@@ -133,7 +138,14 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .padding()
                             .background(Color.blue)
-                            .cornerRadius(10)
+                            .cornerRadius(15)
+                            .overlay(
+                                GeometryReader { geometry in
+                                    Color.clear.onAppear {
+                                        buttonHeight = geometry.size.height
+                                    }
+                                }
+                            )
                     }
                     .padding(.trailing)
                     .navigationDestination(isPresented: $showPodcastView) {
@@ -182,6 +194,26 @@ struct TopicRow: View {
         .shadow(radius: 3)
     }
 }
+
+//func fetchTopics() {
+//    guard let url = URL(string: "https://api.example.com/topics") else { return }
+//    URLSession.shared.dataTask(with: url) { data, response, error in
+//        if let data = data {
+//            if let decodedResponse = try? JSONDecoder().decode([Topic].self, from: data) {
+//                DispatchQueue.main.async {
+//                    self.topics = decodedResponse
+//                    self.isLoading = false
+//                }
+//                return
+//            }
+//        }
+//        // Handle error/failure or use default topics
+//        DispatchQueue.main.async {
+//            self.topics = allTopics.shuffled().prefix(8).map { $0 }
+//            self.isLoading = false
+//        }
+//    }.resume()
+//}
 
 #Preview {
     ContentView()
