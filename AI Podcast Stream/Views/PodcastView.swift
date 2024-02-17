@@ -23,7 +23,6 @@ struct PodcastView: View {
     @State private var podcastTopic = ""
     // loading animation
     @State private var isLoading = true
-    @State private var animate = false
     // expanding text window
     @State private var textHeight: CGFloat = 35 // Initial height
     
@@ -65,25 +64,18 @@ struct PodcastView: View {
                     // Play/Pause button
                     if streamer.isLoading {
                         // loading animation
-                        if isLoading {
-                            GeometryReader { geometry in
-                                ZStack(alignment: .leading) {
-                                    Rectangle()
-                                        .fill(Color.gray.opacity(0.3))
-                                        .frame(width: geometry.size.width * 0.85, height: 8)
-                                        .cornerRadius(4)
-                                                
-                                    Rectangle()
-                                        .fill(Color.blue.opacity(0.8))
-                                        .frame(width: (animate ? geometry.size.width * 0.85 : 0), height: 8)
-                                        .cornerRadius(4)
-                                        .animation(Animation.linear(duration: 8).repeatForever(autoreverses: false), value: animate)
+                        ZStack {
+                            if isLoading {
+                                LoadingAnimationView()
+                            }
+                        }
+                        .onChange(of: isLoading) {
+                            if $isLoading.wrappedValue {
+                                withAnimation {
+                                    isLoading = false
                                 }
-                                // Center the ZStack horizontally by adjusting its frame
-                                .frame(width: geometry.size.width, height: geometry.size.height)
-                                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                                .onAppear {
-                                    self.animate = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
+                                    isLoading = true
                                 }
                             }
                         }
@@ -179,6 +171,33 @@ struct PodcastView: View {
                 self.streamer.playStream(from: url)
             case .failure(let error):
                 print("Error fetching API data: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+struct LoadingAnimationView: View {
+    @State private var animate = false
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(width: geometry.size.width * 0.85, height: 8)
+                    .cornerRadius(4)
+                
+                Rectangle()
+                    .fill(Color.blue.opacity(0.8))
+                    .frame(width: (animate ? geometry.size.width * 0.85 : 0), height: 8)
+                    .cornerRadius(4)
+                    .animation(Animation.linear(duration: 8).repeatForever(autoreverses: false), value: animate)
+            }
+            // Center the ZStack horizontally by adjusting its frame
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .position(x: geometry.size.width / 2, y: geometry.size.height / 2) // Positioning it in the center
+            .onAppear {
+                self.animate = true
             }
         }
     }

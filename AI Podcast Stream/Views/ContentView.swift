@@ -28,41 +28,41 @@ struct ContentView: View {
     @State private var selectedTopic: String?
 
     let allTopics = [
-        Topic(title: "The art of conversation", icon: "message.fill"),
-        Topic(title: "Exploring the universe", icon: "star.fill"),
-        Topic(title: "The history of technology", icon: "gear"),
-        Topic(title: "Future of transportation", icon: "car.fill"),
-        Topic(title: "Deep sea mysteries", icon: "waveform.path.ecg"),
-        Topic(title: "Space travel: myths and facts", icon: "star.fill"),
-        Topic(title: "Ancient civilizations", icon: "pyramid.fill"),
-        Topic(title: "The science of happiness", icon: "smiley.fill"),
-        Topic(title: "World's greatest mysteries", icon: "magnifyingglass.circle.fill"),
-        Topic(title: "Artificial Intelligence & us", icon: "cpu.fill"),
-        Topic(title: "Sustainable living", icon: "leaf.fill"),
-        Topic(title: "The power of meditation", icon: "figure.walk"),
-        Topic(title: "Understanding blockchain", icon: "link"),
-        Topic(title: "The evolution of music", icon: "music.note"),
-        Topic(title: "Photography techniques", icon: "camera.fill"),
-        Topic(title: "Urban gardening and sustainability", icon: "leaf.arrow.circlepath"),
-        Topic(title: "The future of work and digital nomadism", icon: "laptopcomputer"),
-        Topic(title: "Mindfulness and productivity", icon: "hourglass"),
-        Topic(title: "Cultural impacts of cinema", icon: "film"),
-        Topic(title: "Advancements in renewable energy", icon: "bolt.horizontal"),
-        Topic(title: "The psychology of social media", icon: "person.3.fill"),
-        Topic(title: "Exploring minimalist living", icon: "house.fill"),
-        Topic(title: "The art of storytelling", icon: "book.closed.fill"),
-        Topic(title: "Innovations in healthcare", icon: "cross.fill"),
-        Topic(title: "The impact of fashion on society", icon: "eyeglasses"),
-        Topic(title: "Understanding the stock market", icon: "chart.bar.fill"),
-        Topic(title: "The role of AI in education", icon: "graduationcap.fill"),
-        Topic(title: "Exploring virtual reality", icon: "globe"),
-        Topic(title: "The history of video games", icon: "gamecontroller.fill"),
-        Topic(title: "The importance of cybersecurity", icon: "lock.fill"),
-        Topic(title: "The evolution of social networks", icon: "person.2.square.stack.fill"),
-        Topic(title: "The future of space exploration", icon: "star.fill"),
-        Topic(title: "Understanding climate change", icon: "cloud.sun.fill"),
-        Topic(title: "The world of cryptocurrencies", icon: "bitcoinsign.circle.fill"),
-        Topic(title: "The science behind nutrition", icon: "leaf.fill")
+        Topic(title: "The art of conversation", icon: "💬"),
+        Topic(title: "Exploring the universe", icon: "⭐️"),
+        Topic(title: "The history of technology", icon: "⚙️"),
+        Topic(title: "Future of transportation", icon: "🚗"),
+        Topic(title: "Deep sea mysteries", icon: "🌊"),
+        Topic(title: "Space travel: myths and facts", icon: "🚀"),
+        Topic(title: "Ancient civilizations", icon: "🔺"),
+        Topic(title: "The science of happiness", icon: "😊"),
+        Topic(title: "World's greatest mysteries", icon: "🔍"),
+        Topic(title: "Artificial Intelligence & us", icon: "🖥"),
+        Topic(title: "Sustainable living", icon: "🍃"),
+        Topic(title: "The power of meditation", icon: "🚶‍♂️"),
+        Topic(title: "Understanding blockchain", icon: "🔗"),
+        Topic(title: "The evolution of music", icon: "🎵"),
+        Topic(title: "Photography techniques", icon: "📷"),
+        Topic(title: "Urban gardening and sustainability", icon: "🍃"),
+        Topic(title: "The future of work and digital nomadism", icon: "💻"),
+        Topic(title: "Mindfulness and productivity", icon: "⏳"),
+        Topic(title: "Cultural impacts of cinema", icon: "🎞"),
+        Topic(title: "Advancements in renewable energy", icon: "⚡️"),
+        Topic(title: "The psychology of social media", icon: "👥"),
+        Topic(title: "Exploring minimalist living", icon: "🏠"),
+        Topic(title: "The art of storytelling", icon: "📖"),
+        Topic(title: "Innovations in healthcare", icon: "❌"),
+        Topic(title: "The impact of fashion on society", icon: "👓"),
+        Topic(title: "Understanding the stock market", icon: "📊"),
+        Topic(title: "The role of AI in education", icon: "🎓"),
+        Topic(title: "Exploring virtual reality", icon: "🌐"),
+        Topic(title: "The history of video games", icon: "🎮"),
+        Topic(title: "The importance of cybersecurity", icon: "🔒"),
+        Topic(title: "The evolution of social networks", icon: "👥"),
+        Topic(title: "The future of space exploration", icon: "🔭"),
+        Topic(title: "Understanding climate change", icon: "☁️"),
+        Topic(title: "The world of cryptocurrencies", icon: "💰"),
+        Topic(title: "The science behind nutrition", icon: "🍃")
     ]
     
     @State private var topics: [Topic] = []
@@ -75,6 +75,7 @@ struct ContentView: View {
                     .fontWeight(.bold)
                     .padding(.top)
 
+                // topics to get started
                 NavigationView {
                     ScrollView {
                         VStack(spacing: 20) {
@@ -95,6 +96,7 @@ struct ContentView: View {
                     }
                 }.navigationViewStyle(StackNavigationViewStyle())
                 
+                // text input field with placeholder
                 HStack {
                     ZStack(alignment: .topLeading) {
                         TextEditor(text: $inputTopic)
@@ -119,6 +121,7 @@ struct ContentView: View {
                     }
                     .padding() // Apply padding to the ZStack for outer spacing
                     
+                    // button to send the text
                     Button(action: {
                         if !inputTopic.isEmpty {
                             temporaryTopic = inputTopic
@@ -163,11 +166,12 @@ struct TopicRow: View {
     
     var body: some View {
         HStack {
-            Image(systemName: topic.icon)
-                .foregroundColor(.accentColor)
-                .imageScale(.medium)
+            Text(topic.icon)
+                .font(.system(size: 24)) // Adjusted for emoji display
                 .frame(width: 36, height: 36)
+                .padding(.leading, 8) // Added small margin from the left side of the emoji
             Text(topic.title)
+                .foregroundColor(.black) // Ensure text color is black
                 .lineLimit(2)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.body)
