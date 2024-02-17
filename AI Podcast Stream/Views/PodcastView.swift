@@ -21,6 +21,12 @@ struct PodcastView: View {
     @State private var authToken: String? = nil
     // podcast topic
     @State private var podcastTopic = ""
+    // loading states signs
+    @State private var currentStateIndex = 0
+    @State private var isCycling = true
+    let states = ["Creating", "Recording", "Editing", "Loading"]
+    @State private var scale: CGFloat = 1
+    @State private var opacity: Double = 1
     
     
 
@@ -55,9 +61,25 @@ struct PodcastView: View {
                 
                 VStack{
                     Spacer()
+                    Spacer()
                     
                     // Play/Pause button
                     if streamer.isLoading {
+                        // loading status animation
+                        if isCycling {
+                            Text(states[currentStateIndex])
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.black)
+                                .scaleEffect(scale)
+                                .opacity(opacity)
+                                .onAppear {
+                                    cycleStates()
+                                }
+                        }
+                        
+                        Spacer()
+                        
                         ProgressView()
                             .scaleEffect(1.5)
                             .padding(.bottom, 35)
@@ -99,6 +121,7 @@ struct PodcastView: View {
                 fetchAuthToken()
                 imageFetcher.loadCoverImage(topic: receivedTopic)
                 streamer.setupRemoteTransportControls()
+                isCycling = true
             }
         }
     }
@@ -106,13 +129,15 @@ struct PodcastView: View {
     // play/pause button
     private func handleAudioButton() {
         streamer.togglePlayPause()
+        isCycling = false
     }
     
     private func startPodastButton() {
         self.isPlaying = true
         let url = URL(string: Constants.getAudioStream + "?userId=" + (authToken ?? "12345") + "&topic=" + podcastTopic)!
         self.streamer.playStream(from: url)
-//        self.streamer.playStream(from: "https://wpr-ice.streamguys1.com/wpr-music-mp3-96")
+//        let url = URL(string: "https://wpr-ice.streamguys1.com/wpr-music-mp3-96")!
+//        self.streamer.playStream(from: url)
     }
     
     private func fetchAuthToken() {
@@ -120,12 +145,36 @@ struct PodcastView: View {
             switch result {
             case .success(let responseString):
                 print("API Response: \(responseString)")
-                self.authToken = responseString
-                self.isPlaying = true
-                let url = URL(string: Constants.getAudioStream + "?userId=" + uuid + "&podcastId=" + (authToken ?? uuid) + "&topic=" + receivedTopic)!
+//                self.authToken = responseString
+//                self.isPlaying = true
+//                let url = URL(string: Constants.getAudioStream + "?userId=" + uuid + "&podcastId=" + (authToken ?? uuid) + "&topic=" + receivedTopic)!
+//                self.streamer.playStream(from: url)
+                let url = URL(string: "https://wpr-ice.streamguys1.com/wpr-music-mp3-96")!
                 self.streamer.playStream(from: url)
             case .failure(let error):
                 print("Error fetching API data: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func cycleStates() {
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { timer in
+            if !isCycling {
+                timer.invalidate()
+            } else {
+                withAnimation(.easeInOut(duration: 1.0)) {
+                    scale = 0.5
+                    opacity = 0.0
+                }
+                    
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    currentStateIndex = (currentStateIndex + 1) % states.count
+                        
+                    withAnimation(.easeInOut(duration: 1.0)) {
+                        scale = 1
+                        opacity = 1
+                    }
+                }
             }
         }
     }
