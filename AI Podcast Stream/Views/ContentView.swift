@@ -28,44 +28,8 @@ struct ContentView: View {
     @State private var selectedTopic: String?
     @State private var buttonHeight: CGFloat = 0
 
-    let allTopics = [
-        Topic(title: "The art of conversation", icon: "💬"),
-        Topic(title: "Exploring the universe", icon: "⭐️"),
-        Topic(title: "The history of technology", icon: "⚙️"),
-        Topic(title: "Future of transportation", icon: "🚗"),
-        Topic(title: "Deep sea mysteries", icon: "🌊"),
-        Topic(title: "Space travel: myths and facts", icon: "🚀"),
-        Topic(title: "Ancient civilizations", icon: "🔺"),
-        Topic(title: "The science of happiness", icon: "😊"),
-        Topic(title: "World's greatest mysteries", icon: "🔍"),
-        Topic(title: "Artificial Intelligence & us", icon: "🖥"),
-        Topic(title: "Sustainable living", icon: "🍃"),
-        Topic(title: "The power of meditation", icon: "🚶‍♂️"),
-        Topic(title: "Understanding blockchain", icon: "🔗"),
-        Topic(title: "The evolution of music", icon: "🎵"),
-        Topic(title: "Photography techniques", icon: "📷"),
-        Topic(title: "Urban gardening and sustainability", icon: "🍃"),
-        Topic(title: "The future of work and digital nomadism", icon: "💻"),
-        Topic(title: "Mindfulness and productivity", icon: "⏳"),
-        Topic(title: "Cultural impacts of cinema", icon: "🎞"),
-        Topic(title: "Advancements in renewable energy", icon: "⚡️"),
-        Topic(title: "The psychology of social media", icon: "👥"),
-        Topic(title: "Exploring minimalist living", icon: "🏠"),
-        Topic(title: "The art of storytelling", icon: "📖"),
-        Topic(title: "Innovations in healthcare", icon: "❌"),
-        Topic(title: "The impact of fashion on society", icon: "👓"),
-        Topic(title: "Understanding the stock market", icon: "📊"),
-        Topic(title: "The role of AI in education", icon: "🎓"),
-        Topic(title: "Exploring virtual reality", icon: "🌐"),
-        Topic(title: "The history of video games", icon: "🎮"),
-        Topic(title: "The importance of cybersecurity", icon: "🔒"),
-        Topic(title: "The evolution of social networks", icon: "👥"),
-        Topic(title: "The future of space exploration", icon: "🔭"),
-        Topic(title: "Understanding climate change", icon: "☁️"),
-        Topic(title: "The world of cryptocurrencies", icon: "💰"),
-        Topic(title: "The science behind nutrition", icon: "🍃")
-    ]
-    
+    // Topics
+    @State private var allTopics: [Topic] = Topics.allTopics
     @State private var topics: [Topic] = []
     @State private var isLoading = true
         
@@ -77,16 +41,23 @@ struct ContentView: View {
                     .fontWeight(.bold)
                     .padding(.top)
 
-                // topics to get started
+                // Topics to get started
                 NavigationView {
                     ScrollView {
                         VStack(spacing: 20) {
-                            ForEach(topics) { topic in
-                                NavigationLink(destination: PodcastView(receivedTopic: topic.title, uuid: uuid)) {
-                                    TopicRow(topic: topic)
-                                        .frame(width: UIScreen.main.bounds.width * 0.85)
+                            if isLoading {
+                                ForEach(allTopics.shuffled().prefix(8)) { topic in
+                                TopicRow(topic: topic)
+                                    .frame(width: UIScreen.main.bounds.width * 0.85)
                                 }
-                                .buttonStyle(.plain)
+                            } else {
+                                ForEach(topics) { topic in
+                                    NavigationLink(destination: PodcastView(receivedTopic: topic.title, uuid: uuid)) {
+                                        TopicRow(topic: topic)
+                                            .frame(width: UIScreen.main.bounds.width * 0.85)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
                             }
                         }
                         .padding()
@@ -94,11 +65,11 @@ struct ContentView: View {
                     .navigationTitle("Topics to get started")
                     .navigationBarTitleDisplayMode(.inline)
                     .onAppear {
-                        topics = allTopics.shuffled().prefix(8).map { $0 }
+                        fetchTopics()
                     }
                 }.navigationViewStyle(StackNavigationViewStyle())
                 
-                // text input field with placeholder
+                // Text input field with placeholder
                 HStack {
                     ZStack(alignment: .topLeading) {
                         TextEditor(text: $inputTopic)
@@ -118,7 +89,7 @@ struct ContentView: View {
                             }
                         
                         if inputTopic.isEmpty {
-                            Text("Podcast anything 🎤")
+                            Text("Podcast anything")
                                 .foregroundColor(.gray)
                                 .padding(.horizontal, 7) // Adjust to match TextEditor's text padding
                                 .padding(.vertical, 8) // Adjust to match TextEditor's text padding
@@ -126,7 +97,7 @@ struct ContentView: View {
                     }
                     .padding() // Apply padding to the ZStack for outer spacing
                     
-                    // button to send the text
+                    // Button
                     Button(action: {
                         if !inputTopic.isEmpty {
                             temporaryTopic = inputTopic
@@ -163,56 +134,42 @@ struct ContentView: View {
             })
         }
     }
+    
+    func fetchTopics() {
+        guard let url = URL(string: "Constants.getTopics") else { return }
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data {
+                if let decodedResponse = try? JSONDecoder().decode([Topic].self, from: data) {
+                    DispatchQueue.main.async {
+                        self.topics = decodedResponse
+                        self.isLoading = false
+                    }
+                    return
+                }
+            }
+            // Handle error/failure or use default topics
+            DispatchQueue.main.async {
+                self.topics = allTopics.shuffled().prefix(8).map { $0 }
+                self.isLoading = false
+            }
+        }.resume()
+    }
 }
 
-
-struct Topic: Identifiable {
-    let id = UUID()
+struct Topic: Identifiable, Codable {
+    var id: Int
     let title: String
     let icon: String
 }
 
-
-struct TopicRow: View {
-    var topic: Topic
-    
-    var body: some View {
-        HStack {
-            Text(topic.icon)
-                .font(.system(size: 24)) // Adjusted for emoji display
-                .frame(width: 36, height: 36)
-                .padding(.leading, 8) // Added small margin from the left side of the emoji
-            Text(topic.title)
-                .foregroundColor(.black) // Ensure text color is black
-                .lineLimit(2)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.body)
-        }
-        .padding(.vertical, 8)
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(8)
-        .shadow(radius: 3)
-    }
-}
-
-//func fetchTopics() {
-//    guard let url = URL(string: "https://api.example.com/topics") else { return }
-//    URLSession.shared.dataTask(with: url) { data, response, error in
-//        if let data = data {
-//            if let decodedResponse = try? JSONDecoder().decode([Topic].self, from: data) {
-//                DispatchQueue.main.async {
-//                    self.topics = decodedResponse
-//                    self.isLoading = false
-//                }
-//                return
-//            }
-//        }
-//        // Handle error/failure or use default topics
-//        DispatchQueue.main.async {
-//            self.topics = allTopics.shuffled().prefix(8).map { $0 }
-//            self.isLoading = false
-//        }
-//    }.resume()
+//struct DetailView: View {
+//    var topic: Topic
+//    
+//    var body: some View {
+//        Text("Details for \(topic.title)")
+//            .navigationTitle(topic.title)
+//            .navigationBarTitleDisplayMode(.inline)
+//    }
 //}
 
 #Preview {

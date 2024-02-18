@@ -16,6 +16,9 @@
 		2F99C02F2B4F004B000B0A87 /* ImageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C02E2B4F004B000B0A87 /* ImageFetcher.swift */; };
 		2F99C0322B4F099E000B0A87 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C0312B4F099E000B0A87 /* APIService.swift */; };
 		2F99C0362B4F0A83000B0A87 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C0352B4F0A83000B0A87 /* Constants.swift */; };
+		2FDE052F2B823C5B009A9F33 /* Topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE052E2B823C5B009A9F33 /* Topics.swift */; };
+		2FDE05332B824566009A9F33 /* LoadingAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE05322B824566009A9F33 /* LoadingAnimationView.swift */; };
+		2FDE05352B8245FA009A9F33 /* TopicRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE05342B8245FA009A9F33 /* TopicRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		2F99C02E2B4F004B000B0A87 /* ImageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetcher.swift; sourceTree = "<group>"; };
 		2F99C0312B4F099E000B0A87 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		2F99C0352B4F0A83000B0A87 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2FDE052E2B823C5B009A9F33 /* Topics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topics.swift; sourceTree = "<group>"; };
+		2FDE05322B824566009A9F33 /* LoadingAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingAnimationView.swift; sourceTree = "<group>"; };
+		2FDE05342B8245FA009A9F33 /* TopicRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +93,8 @@
 			children = (
 				2F99C0142B4EEF26000B0A87 /* ContentView.swift */,
 				2F99C0212B4EF074000B0A87 /* PodcastView.swift */,
+				2FDE05322B824566009A9F33 /* LoadingAnimationView.swift */,
+				2FDE05342B8245FA009A9F33 /* TopicRow.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -112,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				2F99C0352B4F0A83000B0A87 /* Constants.swift */,
+				2FDE052E2B823C5B009A9F33 /* Topics.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -187,11 +196,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F99C0152B4EEF26000B0A87 /* ContentView.swift in Sources */,
+				2FDE052F2B823C5B009A9F33 /* Topics.swift in Sources */,
 				2F99C0132B4EEF26000B0A87 /* AI_Podcast_StreamApp.swift in Sources */,
 				2F99C0222B4EF074000B0A87 /* PodcastView.swift in Sources */,
 				2F99C02C2B4EF1F3000B0A87 /* AudioStreamer.swift in Sources */,
 				2F99C0362B4F0A83000B0A87 /* Constants.swift in Sources */,
+				2FDE05332B824566009A9F33 /* LoadingAnimationView.swift in Sources */,
 				2F99C0322B4F099E000B0A87 /* APIService.swift in Sources */,
+				2FDE05352B8245FA009A9F33 /* TopicRow.swift in Sources */,
 				2F99C02F2B4F004B000B0A87 /* ImageFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

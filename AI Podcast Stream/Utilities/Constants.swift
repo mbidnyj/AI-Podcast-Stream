@@ -12,8 +12,10 @@ struct Constants {
 //    static let getAuth = "http://localhost:8080/api/getAuth"
 //    static let getCover = "http://localhost:8080/api/getCover"
 //    static let getAudioStream = "http://localhost:8080/api/getAudioStream"
+//    static let getTopics = "http://localhost:8080/api/getTopics"
     
     static let getAuth = "https://orca-app-ilspx.ondigitalocean.app/api/getAuth"
     static let getCover = "https://orca-app-ilspx.ondigitalocean.app/api/getCover"
     static let getAudioStream = "https://orca-app-ilspx.ondigitalocean.app/api/getAudioStream"
+    static let getTopics = "https://orca-app-ilspx.ondigitalocean.app/api/getTopics"
 }
