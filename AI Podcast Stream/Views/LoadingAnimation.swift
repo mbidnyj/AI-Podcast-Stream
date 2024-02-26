@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LoadingAnimationView: View {
+struct LoadingAnimation: View {
     @State private var animate = false
 
     var body: some View {
@@ -22,7 +22,7 @@ struct LoadingAnimationView: View {
                     .fill(Color.blue.opacity(0.8))
                     .frame(width: (animate ? geometry.size.width * 0.85 : 0), height: 8)
                     .cornerRadius(4)
-                    .animation(Animation.linear(duration: 8).repeatForever(autoreverses: false), value: animate)
+                    .animation(Animation.linear(duration: 10).repeatForever(autoreverses: false), value: animate)
             }
             // Center the ZStack horizontally by adjusting its frame
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -35,5 +35,5 @@ struct LoadingAnimationView: View {
 }
 
 #Preview {
-    LoadingAnimationView()
+    LoadingAnimation()
 }

@@ -66,7 +66,7 @@ struct PodcastView: View {
                         // Loading animation
                         ZStack {
                             if isLoading {
-                                LoadingAnimationView()
+                                LoadingAnimation()
                             }
                         }
                         .onChange(of: isLoading) {
@@ -174,13 +174,13 @@ struct PodcastView: View {
             switch result {
             case .success(let responseString):
                 print("API Response: \(responseString)")
-//                self.authToken = responseString
-//                self.isPlaying = true
-//                let url = URL(string: Constants.getAudioStream + "?userId=" + uuid + "&podcastId=" + (authToken ?? uuid) + "&topic=" + receivedTopic)!
-//                self.streamer.playStream(from: url)
-                // Public radio url
-                let url = URL(string: "https://wpr-ice.streamguys1.com/wpr-music-mp3-96")!
+                self.authToken = responseString
+                self.isPlaying = true
+                let url = URL(string: Constants.getAudioStream + "?userId=" + uuid + "&podcastId=" + (authToken ?? uuid) + "&topic=" + receivedTopic)!
                 self.streamer.playStream(from: url)
+                // Public radio url
+//                let url = URL(string: "https://wpr-ice.streamguys1.com/wpr-music-mp3-96")!
+//                self.streamer.playStream(from: url)
             case .failure(let error):
                 print("Error fetching API data: \(error.localizedDescription)")
             }

@@ -17,7 +17,7 @@
 		2F99C0322B4F099E000B0A87 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C0312B4F099E000B0A87 /* APIService.swift */; };
 		2F99C0362B4F0A83000B0A87 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99C0352B4F0A83000B0A87 /* Constants.swift */; };
 		2FDE052F2B823C5B009A9F33 /* Topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE052E2B823C5B009A9F33 /* Topics.swift */; };
-		2FDE05332B824566009A9F33 /* LoadingAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE05322B824566009A9F33 /* LoadingAnimationView.swift */; };
+		2FDE05332B824566009A9F33 /* LoadingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE05322B824566009A9F33 /* LoadingAnimation.swift */; };
 		2FDE05352B8245FA009A9F33 /* TopicRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE05342B8245FA009A9F33 /* TopicRow.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,7 +34,7 @@
 		2F99C0312B4F099E000B0A87 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		2F99C0352B4F0A83000B0A87 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2FDE052E2B823C5B009A9F33 /* Topics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topics.swift; sourceTree = "<group>"; };
-		2FDE05322B824566009A9F33 /* LoadingAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingAnimationView.swift; sourceTree = "<group>"; };
+		2FDE05322B824566009A9F33 /* LoadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingAnimation.swift; sourceTree = "<group>"; };
 		2FDE05342B8245FA009A9F33 /* TopicRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,7 +93,7 @@
 			children = (
 				2F99C0142B4EEF26000B0A87 /* ContentView.swift */,
 				2F99C0212B4EF074000B0A87 /* PodcastView.swift */,
-				2FDE05322B824566009A9F33 /* LoadingAnimationView.swift */,
+				2FDE05322B824566009A9F33 /* LoadingAnimation.swift */,
 				2FDE05342B8245FA009A9F33 /* TopicRow.swift */,
 			);
 			path = Views;
@@ -201,7 +201,7 @@
 				2F99C0222B4EF074000B0A87 /* PodcastView.swift in Sources */,
 				2F99C02C2B4EF1F3000B0A87 /* AudioStreamer.swift in Sources */,
 				2F99C0362B4F0A83000B0A87 /* Constants.swift in Sources */,
-				2FDE05332B824566009A9F33 /* LoadingAnimationView.swift in Sources */,
+				2FDE05332B824566009A9F33 /* LoadingAnimation.swift in Sources */,
 				2F99C0322B4F099E000B0A87 /* APIService.swift in Sources */,
 				2FDE05352B8245FA009A9F33 /* TopicRow.swift in Sources */,
 				2F99C02F2B4F004B000B0A87 /* ImageFetcher.swift in Sources */,
@@ -342,6 +342,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AI-Podcast-Stream-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Podcaster;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -353,7 +354,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "me.bidnyi.maksym.AI-Podcast-Stream";
+				PRODUCT_BUNDLE_IDENTIFIER = me.bidnyi.maksym.Podcaster;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -373,6 +374,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AI-Podcast-Stream-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Podcaster;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -384,7 +386,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "me.bidnyi.maksym.AI-Podcast-Stream";
+				PRODUCT_BUNDLE_IDENTIFIER = me.bidnyi.maksym.Podcaster;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

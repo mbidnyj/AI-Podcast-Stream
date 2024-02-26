@@ -162,16 +162,6 @@ struct Topic: Identifiable, Codable {
     let icon: String
 }
 
-//struct DetailView: View {
-//    var topic: Topic
-//    
-//    var body: some View {
-//        Text("Details for \(topic.title)")
-//            .navigationTitle(topic.title)
-//            .navigationBarTitleDisplayMode(.inline)
-//    }
-//}
-
 #Preview {
     ContentView()
 }
